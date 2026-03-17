@@ -28,10 +28,23 @@ function App() {
 
   return (
     <div className="app">
+      {/* Small screens: landscape only — show overlay in portrait */}
+      <div className="rotate-overlay" aria-hidden="true">
+        <div className="rotate-overlay-content">
+          <span className="rotate-icon" aria-hidden="true">↻</span>
+          <p className="rotate-title">Landscape only</p>
+          <p className="rotate-message">Please rotate your device to landscape to view this presentation.</p>
+        </div>
+      </div>
+
       <div className="slide-viewport">
-        <div className="slide-scope" key={currentIndex}>
-          <style dangerouslySetInnerHTML={{ __html: slide.css }} />
-          <div dangerouslySetInnerHTML={{ __html: slide.html }} />
+        <div className="slide-fit">
+          <div className="slide-scale-wrap">
+            <div className="slide-scope" key={currentIndex}>
+              <style dangerouslySetInnerHTML={{ __html: slide.css }} />
+              <div dangerouslySetInnerHTML={{ __html: slide.html }} />
+            </div>
+          </div>
         </div>
       </div>
 
