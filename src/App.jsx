@@ -1,10 +1,22 @@
 import { useState, useEffect, useCallback } from 'react'
 import { slides } from './slidesData'
+import { globalHtmlById } from './globalSlideHtml'
+import { fetchPricingRegion } from './geoRegion'
 import './App.css'
 
 function App() {
   const [currentIndex, setCurrentIndex] = useState(0)
+  const [pricingRegion, setPricingRegion] = useState('IN')
   const slide = slides[currentIndex]
+
+  const slideHtml =
+    pricingRegion === 'global' && globalHtmlById[slide.id]
+      ? globalHtmlById[slide.id]
+      : slide.html
+
+  useEffect(() => {
+    fetchPricingRegion().then(setPricingRegion)
+  }, [])
 
   const goNext = useCallback(() => {
     setCurrentIndex((i) => (i < slides.length - 1 ? i + 1 : i))
@@ -40,9 +52,12 @@ function App() {
       <div className="slide-viewport">
         <div className="slide-fit">
           <div className="slide-scale-wrap">
-            <div className="slide-scope" key={currentIndex}>
+            <div
+              className="slide-scope"
+              key={currentIndex + (pricingRegion === 'global' ? '-g' : '-in')}
+            >
               <style dangerouslySetInnerHTML={{ __html: slide.css }} />
-              <div dangerouslySetInnerHTML={{ __html: slide.html }} />
+              <div dangerouslySetInnerHTML={{ __html: slideHtml }} />
             </div>
           </div>
         </div>
